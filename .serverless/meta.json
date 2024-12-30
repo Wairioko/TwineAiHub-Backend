@@ -1,0 +1,1559 @@
+{
+  "C:\\Users\\HP\\Desktop\\thirdman-backend": {
+    "versionSfCore": null,
+    "versionFramework": "4.4.18",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "default-aws-credential-resolver": "<REDACTED>",
+      "env": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "org": "twineaihub",
+            "app": "twineaihub",
+            "service": "twineaihub",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs20.x",
+              "region": "us-east-1",
+              "memorySize": 2048,
+              "timeout": 30,
+              "lambdaHashingVersion": "20201221",
+              "httpApi": {
+                "cors": {
+                  "allowedOrigins": [
+                    "https://twineaihub.com"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                }
+              },
+              "environment": {
+                "PADDLE_PUBLIC_KEY": "",
+                "ALLOW_ANONYMOUS": "true",
+                "JWT_SECRET": "<REDACTED>",
+                "OPENAI_API_KEY": "<REDACTED>",
+                "Google_Gemini_KEY": "AIzaSyDWmLWTEAujx3vLdfH-VTifvE2Jti6bR5U",
+                "Claude_Key": "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",
+                "MONGODB_URL": "mongodb+srv://wairioko:9397Arsenal@twineaihub.nvy6uxv.mongodb.net/?retryWrites=true&w=majority&appName=twineaihub",
+                "GOOGLE_CLIENT_ID": "567429857631-ebammee25cmgj0hhmh4v9u3gis8ls3h1.apps.googleusercontent.com",
+                "GOOGLE_CLIENT_SECRET": "<REDACTED>",
+                "AWS_BUCKET_NAME": "aiflow",
+                "REFRESH_TOKEN_SECRET": "<REDACTED>",
+                "NODE_ENV": "production",
+                "CLIENT_URL": "https://www.twineaihub.com",
+                "COOKIE_DOMAIN": "www.62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws",
+                "GOOGLE_CALLBACK_URL": "https://62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws/auth/google/callback",
+                "COGNITO_AWS_REGION": "us-east-1",
+                "COGNITO_USER_POOL_ID": "us-east-1_LTkM1F1HZ",
+                "COGNITO_CLIENT_ID": "7hljljjtpgrqr26m8ssdiv9775",
+                "REDIS_URL": "redis-15846.c85.us-east-1-2.ec2.redns.redis-cloud.com:15846",
+                "REDIS_PASSWORD": "<REDACTED>"
+              },
+              "iam": {
+                "role": {
+                  "statements": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "s3:PutObject",
+                        "s3:GetObject",
+                        "s3:DeleteObject"
+                      ],
+                      "Resource": "arn:aws:s3:::aiflow/*"
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:*"
+                      ],
+                      "Resource": "*"
+                    }
+                  ]
+                }
+              },
+              "stage": "dev",
+              "versionFunctions": true,
+              "compiledCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "StartApplicationLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/twineaihub-dev-startApplication"
+                    }
+                  },
+                  "IamRoleLambdaExecution": {
+                    "Type": "AWS::IAM::Role",
+                    "Properties": {
+                      "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                          {
+                            "Effect": "Allow",
+                            "Principal": {
+                              "Service": [
+                                "lambda.amazonaws.com"
+                              ]
+                            },
+                            "Action": [
+                              "sts:AssumeRole"
+                            ]
+                          }
+                        ]
+                      },
+                      "Policies": [
+                        {
+                          "PolicyName": {
+                            "Fn::Join": [
+                              "-",
+                              [
+                                "twineaihub",
+                                "dev",
+                                "lambda"
+                              ]
+                            ]
+                          },
+                          "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:CreateLogStream",
+                                  "logs:CreateLogGroup",
+                                  "logs:TagResource"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/twineaihub-dev*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:PutLogEvents"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/twineaihub-dev*:*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "s3:PutObject",
+                                  "s3:GetObject",
+                                  "s3:DeleteObject"
+                                ],
+                                "Resource": "arn:aws:s3:::aiflow/*"
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "dynamodb:*"
+                                ],
+                                "Resource": "*"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "Path": "/",
+                      "RoleName": {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            "twineaihub",
+                            "dev",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            "lambdaRole"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "StartApplicationLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-841f666e-620d",
+                        "S3Key": "serverless/twineaihub/dev/1734637644091-2024-12-19T19:47:24.091Z/twineaihub.zip"
+                      },
+                      "Handler": "src/handler.startApplication",
+                      "Runtime": "nodejs20.x",
+                      "FunctionName": "twineaihub-dev-startApplication",
+                      "MemorySize": 2048,
+                      "Timeout": 30,
+                      "Environment": {
+                        "Variables": {
+                          "PADDLE_PUBLIC_KEY": "",
+                          "ALLOW_ANONYMOUS": "true",
+                          "JWT_SECRET": "<REDACTED>",
+                          "OPENAI_API_KEY": "<REDACTED>",
+                          "Google_Gemini_KEY": "AIzaSyDWmLWTEAujx3vLdfH-VTifvE2Jti6bR5U",
+                          "Claude_Key": "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",
+                          "MONGODB_URL": "mongodb+srv://wairioko:9397Arsenal@twineaihub.nvy6uxv.mongodb.net/?retryWrites=true&w=majority&appName=twineaihub",
+                          "GOOGLE_CLIENT_ID": "567429857631-ebammee25cmgj0hhmh4v9u3gis8ls3h1.apps.googleusercontent.com",
+                          "GOOGLE_CLIENT_SECRET": "<REDACTED>",
+                          "AWS_BUCKET_NAME": "aiflow",
+                          "REFRESH_TOKEN_SECRET": "<REDACTED>",
+                          "NODE_ENV": "production",
+                          "CLIENT_URL": "https://www.twineaihub.com",
+                          "COOKIE_DOMAIN": "www.62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws",
+                          "GOOGLE_CALLBACK_URL": "https://62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws/auth/google/callback",
+                          "COGNITO_AWS_REGION": "us-east-1",
+                          "COGNITO_USER_POOL_ID": "us-east-1_LTkM1F1HZ",
+                          "COGNITO_CLIENT_ID": "7hljljjtpgrqr26m8ssdiv9775",
+                          "REDIS_URL": "redis-15846.c85.us-east-1-2.ec2.redns.redis-cloud.com:15846",
+                          "REDIS_PASSWORD": "<REDACTED>"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "StartApplicationLogGroup"
+                    ]
+                  },
+                  "StartApplicationLambdaVersionzw2BAG0W5CPU1plQ1jSuD2zf4GNjiesIxBaI7RuvIiY": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "StartApplicationLambdaFunction"
+                      },
+                      "CodeSha256": "HB2Z2Dn86eWH9eyWbGrbzI27PtSRuhgVYcNygEjnMXY="
+                    }
+                  },
+                  "HttpApi": {
+                    "Type": "AWS::ApiGatewayV2::Api",
+                    "Properties": {
+                      "Name": "dev-twineaihub",
+                      "ProtocolType": "HTTP",
+                      "CorsConfiguration": {
+                        "AllowCredentials": "<REDACTED>",
+                        "AllowHeaders": [
+                          "Content-Type",
+                          "X-Amz-Date",
+                          "Authorization",
+                          "X-Api-Key",
+                          "X-Amz-Security-Token",
+                          "X-Amz-User-Agent",
+                          "X-Amzn-Trace-Id"
+                        ],
+                        "AllowMethods": [
+                          "OPTIONS",
+                          "GET",
+                          "POST",
+                          "PUT",
+                          "PATCH",
+                          "HEAD",
+                          "DELETE"
+                        ],
+                        "AllowOrigins": [
+                          "https://twineaihub.com"
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiStage": {
+                    "Type": "AWS::ApiGatewayV2::Stage",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "StageName": "$default",
+                      "AutoDeploy": true,
+                      "DefaultRouteSettings": {
+                        "DetailedMetricsEnabled": false
+                      }
+                    }
+                  },
+                  "StartApplicationLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "StartApplicationLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationStartApplication": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "StartApplicationLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRouteAnyProxyVar": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "ANY /{proxy+}",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationStartApplication"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationStartApplication"
+                  },
+                  "HttpApiRouteAny": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "ANY /",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationStartApplication"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationStartApplication"
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": "serverless-framework-deployments-us-east-1-841f666e-620d",
+                    "Export": {
+                      "Name": "sls-twineaihub-dev-ServerlessDeploymentBucketName"
+                    }
+                  },
+                  "StartApplicationLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "StartApplicationLambdaVersionzw2BAG0W5CPU1plQ1jSuD2zf4GNjiesIxBaI7RuvIiY"
+                    },
+                    "Export": {
+                      "Name": "sls-twineaihub-dev-StartApplicationLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "HttpApiId": {
+                    "Description": "Id of the HTTP API",
+                    "Value": {
+                      "Ref": "HttpApi"
+                    },
+                    "Export": {
+                      "Name": "sls-twineaihub-dev-HttpApiId"
+                    }
+                  },
+                  "HttpApiUrl": {
+                    "Description": "URL of the HTTP API",
+                    "Value": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "https://",
+                          {
+                            "Ref": "HttpApi"
+                          },
+                          ".execute-api.",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ".",
+                          {
+                            "Ref": "AWS::URLSuffix"
+                          }
+                        ]
+                      ]
+                    },
+                    "Export": {
+                      "Name": "sls-twineaihub-dev-HttpApiUrl"
+                    }
+                  }
+                }
+              },
+              "vpc": {}
+            },
+            "functions": {
+              "startApplication": {
+                "handler": "src/handler.startApplication",
+                "events": [
+                  {
+                    "httpApi": {
+                      "method": "*",
+                      "path": "/{proxy+}"
+                    },
+                    "resolvedMethod": "ANY",
+                    "resolvedPath": "/{proxy+}"
+                  },
+                  {
+                    "httpApi": {
+                      "method": "*",
+                      "path": "/"
+                    },
+                    "resolvedMethod": "ANY",
+                    "resolvedPath": "/"
+                  }
+                ],
+                "name": "twineaihub-dev-startApplication",
+                "package": {},
+                "memory": 2048,
+                "timeout": 30,
+                "runtime": "nodejs20.x",
+                "vpc": {},
+                "versionLogicalId": "StartApplicationLambdaVersionzw2BAG0W5CPU1plQ1jSuD2zf4GNjiesIxBaI7RuvIiY"
+              }
+            },
+            "custom": {
+              "dotenv": {
+                "path": ".env",
+                "exclude": [
+                  "AWS_ACCESS_KEY_ID",
+                  "AWS_SECRET_ACCESS_KEY",
+                  "AWS_REGION"
+                ]
+              },
+              "stages": [
+                "production",
+                "development"
+              ]
+            },
+            "package": {
+              "exclude": [
+                "node_modules/aws-sdk/**",
+                ".git/**",
+                "docs/**",
+                "tests/**"
+              ],
+              "artifactsS3KeyDirname": "serverless/twineaihub/dev/code-artifacts",
+              "deploymentBucket": "serverless-framework-deployments-us-east-1-841f666e-620d",
+              "artifact": "C:\\Users\\HP\\Desktop\\thirdman-backend\\.serverless\\twineaihub.zip",
+              "artifactDirectoryName": "serverless/twineaihub/dev/1734637644091-2024-12-19T19:47:24.091Z"
+            }
+          },
+          "configFileDirPath": "C:\\Users\\HP\\Desktop\\thirdman-backend",
+          "config": {
+            "type": "env"
+          },
+          "options": {
+            "aws-profile": "default"
+          },
+          "stage": "dev",
+          "dashboard": null,
+          "logger": {
+            "namespace": "s:core:resolver:env",
+            "prefix": null,
+            "prefixColor": null
+          },
+          "_credentialsPromise": "<REDACTED>"
+        },
+        "resolvers": {}
+      },
+      "sls": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "org": "twineaihub",
+            "app": "twineaihub",
+            "service": "twineaihub",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs20.x",
+              "region": "us-east-1",
+              "memorySize": 2048,
+              "timeout": 30,
+              "lambdaHashingVersion": "20201221",
+              "httpApi": {
+                "cors": {
+                  "allowedOrigins": [
+                    "https://twineaihub.com"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                }
+              },
+              "environment": {
+                "PADDLE_PUBLIC_KEY": "",
+                "ALLOW_ANONYMOUS": "true",
+                "JWT_SECRET": "<REDACTED>",
+                "OPENAI_API_KEY": "<REDACTED>",
+                "Google_Gemini_KEY": "AIzaSyDWmLWTEAujx3vLdfH-VTifvE2Jti6bR5U",
+                "Claude_Key": "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",
+                "MONGODB_URL": "mongodb+srv://wairioko:9397Arsenal@twineaihub.nvy6uxv.mongodb.net/?retryWrites=true&w=majority&appName=twineaihub",
+                "GOOGLE_CLIENT_ID": "567429857631-ebammee25cmgj0hhmh4v9u3gis8ls3h1.apps.googleusercontent.com",
+                "GOOGLE_CLIENT_SECRET": "<REDACTED>",
+                "AWS_BUCKET_NAME": "aiflow",
+                "REFRESH_TOKEN_SECRET": "<REDACTED>",
+                "NODE_ENV": "production",
+                "CLIENT_URL": "https://www.twineaihub.com",
+                "COOKIE_DOMAIN": "www.62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws",
+                "GOOGLE_CALLBACK_URL": "https://62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws/auth/google/callback",
+                "COGNITO_AWS_REGION": "us-east-1",
+                "COGNITO_USER_POOL_ID": "us-east-1_LTkM1F1HZ",
+                "COGNITO_CLIENT_ID": "7hljljjtpgrqr26m8ssdiv9775",
+                "REDIS_URL": "redis-15846.c85.us-east-1-2.ec2.redns.redis-cloud.com:15846",
+                "REDIS_PASSWORD": "<REDACTED>"
+              },
+              "iam": {
+                "role": {
+                  "statements": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "s3:PutObject",
+                        "s3:GetObject",
+                        "s3:DeleteObject"
+                      ],
+                      "Resource": "arn:aws:s3:::aiflow/*"
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:*"
+                      ],
+                      "Resource": "*"
+                    }
+                  ]
+                }
+              },
+              "stage": "dev",
+              "versionFunctions": true,
+              "compiledCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "StartApplicationLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/twineaihub-dev-startApplication"
+                    }
+                  },
+                  "IamRoleLambdaExecution": {
+                    "Type": "AWS::IAM::Role",
+                    "Properties": {
+                      "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                          {
+                            "Effect": "Allow",
+                            "Principal": {
+                              "Service": [
+                                "lambda.amazonaws.com"
+                              ]
+                            },
+                            "Action": [
+                              "sts:AssumeRole"
+                            ]
+                          }
+                        ]
+                      },
+                      "Policies": [
+                        {
+                          "PolicyName": {
+                            "Fn::Join": [
+                              "-",
+                              [
+                                "twineaihub",
+                                "dev",
+                                "lambda"
+                              ]
+                            ]
+                          },
+                          "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:CreateLogStream",
+                                  "logs:CreateLogGroup",
+                                  "logs:TagResource"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/twineaihub-dev*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:PutLogEvents"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/twineaihub-dev*:*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "s3:PutObject",
+                                  "s3:GetObject",
+                                  "s3:DeleteObject"
+                                ],
+                                "Resource": "arn:aws:s3:::aiflow/*"
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "dynamodb:*"
+                                ],
+                                "Resource": "*"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "Path": "/",
+                      "RoleName": {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            "twineaihub",
+                            "dev",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            "lambdaRole"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "StartApplicationLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-841f666e-620d",
+                        "S3Key": "serverless/twineaihub/dev/1734637644091-2024-12-19T19:47:24.091Z/twineaihub.zip"
+                      },
+                      "Handler": "src/handler.startApplication",
+                      "Runtime": "nodejs20.x",
+                      "FunctionName": "twineaihub-dev-startApplication",
+                      "MemorySize": 2048,
+                      "Timeout": 30,
+                      "Environment": {
+                        "Variables": {
+                          "PADDLE_PUBLIC_KEY": "",
+                          "ALLOW_ANONYMOUS": "true",
+                          "JWT_SECRET": "<REDACTED>",
+                          "OPENAI_API_KEY": "<REDACTED>",
+                          "Google_Gemini_KEY": "AIzaSyDWmLWTEAujx3vLdfH-VTifvE2Jti6bR5U",
+                          "Claude_Key": "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",
+                          "MONGODB_URL": "mongodb+srv://wairioko:9397Arsenal@twineaihub.nvy6uxv.mongodb.net/?retryWrites=true&w=majority&appName=twineaihub",
+                          "GOOGLE_CLIENT_ID": "567429857631-ebammee25cmgj0hhmh4v9u3gis8ls3h1.apps.googleusercontent.com",
+                          "GOOGLE_CLIENT_SECRET": "<REDACTED>",
+                          "AWS_BUCKET_NAME": "aiflow",
+                          "REFRESH_TOKEN_SECRET": "<REDACTED>",
+                          "NODE_ENV": "production",
+                          "CLIENT_URL": "https://www.twineaihub.com",
+                          "COOKIE_DOMAIN": "www.62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws",
+                          "GOOGLE_CALLBACK_URL": "https://62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws/auth/google/callback",
+                          "COGNITO_AWS_REGION": "us-east-1",
+                          "COGNITO_USER_POOL_ID": "us-east-1_LTkM1F1HZ",
+                          "COGNITO_CLIENT_ID": "7hljljjtpgrqr26m8ssdiv9775",
+                          "REDIS_URL": "redis-15846.c85.us-east-1-2.ec2.redns.redis-cloud.com:15846",
+                          "REDIS_PASSWORD": "<REDACTED>"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "StartApplicationLogGroup"
+                    ]
+                  },
+                  "StartApplicationLambdaVersionzw2BAG0W5CPU1plQ1jSuD2zf4GNjiesIxBaI7RuvIiY": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "StartApplicationLambdaFunction"
+                      },
+                      "CodeSha256": "HB2Z2Dn86eWH9eyWbGrbzI27PtSRuhgVYcNygEjnMXY="
+                    }
+                  },
+                  "HttpApi": {
+                    "Type": "AWS::ApiGatewayV2::Api",
+                    "Properties": {
+                      "Name": "dev-twineaihub",
+                      "ProtocolType": "HTTP",
+                      "CorsConfiguration": {
+                        "AllowCredentials": "<REDACTED>",
+                        "AllowHeaders": [
+                          "Content-Type",
+                          "X-Amz-Date",
+                          "Authorization",
+                          "X-Api-Key",
+                          "X-Amz-Security-Token",
+                          "X-Amz-User-Agent",
+                          "X-Amzn-Trace-Id"
+                        ],
+                        "AllowMethods": [
+                          "OPTIONS",
+                          "GET",
+                          "POST",
+                          "PUT",
+                          "PATCH",
+                          "HEAD",
+                          "DELETE"
+                        ],
+                        "AllowOrigins": [
+                          "https://twineaihub.com"
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiStage": {
+                    "Type": "AWS::ApiGatewayV2::Stage",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "StageName": "$default",
+                      "AutoDeploy": true,
+                      "DefaultRouteSettings": {
+                        "DetailedMetricsEnabled": false
+                      }
+                    }
+                  },
+                  "StartApplicationLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "StartApplicationLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationStartApplication": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "StartApplicationLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRouteAnyProxyVar": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "ANY /{proxy+}",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationStartApplication"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationStartApplication"
+                  },
+                  "HttpApiRouteAny": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "ANY /",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationStartApplication"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationStartApplication"
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": "serverless-framework-deployments-us-east-1-841f666e-620d",
+                    "Export": {
+                      "Name": "sls-twineaihub-dev-ServerlessDeploymentBucketName"
+                    }
+                  },
+                  "StartApplicationLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "StartApplicationLambdaVersionzw2BAG0W5CPU1plQ1jSuD2zf4GNjiesIxBaI7RuvIiY"
+                    },
+                    "Export": {
+                      "Name": "sls-twineaihub-dev-StartApplicationLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "HttpApiId": {
+                    "Description": "Id of the HTTP API",
+                    "Value": {
+                      "Ref": "HttpApi"
+                    },
+                    "Export": {
+                      "Name": "sls-twineaihub-dev-HttpApiId"
+                    }
+                  },
+                  "HttpApiUrl": {
+                    "Description": "URL of the HTTP API",
+                    "Value": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "https://",
+                          {
+                            "Ref": "HttpApi"
+                          },
+                          ".execute-api.",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ".",
+                          {
+                            "Ref": "AWS::URLSuffix"
+                          }
+                        ]
+                      ]
+                    },
+                    "Export": {
+                      "Name": "sls-twineaihub-dev-HttpApiUrl"
+                    }
+                  }
+                }
+              },
+              "vpc": {}
+            },
+            "functions": {
+              "startApplication": {
+                "handler": "src/handler.startApplication",
+                "events": [
+                  {
+                    "httpApi": {
+                      "method": "*",
+                      "path": "/{proxy+}"
+                    },
+                    "resolvedMethod": "ANY",
+                    "resolvedPath": "/{proxy+}"
+                  },
+                  {
+                    "httpApi": {
+                      "method": "*",
+                      "path": "/"
+                    },
+                    "resolvedMethod": "ANY",
+                    "resolvedPath": "/"
+                  }
+                ],
+                "name": "twineaihub-dev-startApplication",
+                "package": {},
+                "memory": 2048,
+                "timeout": 30,
+                "runtime": "nodejs20.x",
+                "vpc": {},
+                "versionLogicalId": "StartApplicationLambdaVersionzw2BAG0W5CPU1plQ1jSuD2zf4GNjiesIxBaI7RuvIiY"
+              }
+            },
+            "custom": {
+              "dotenv": {
+                "path": ".env",
+                "exclude": [
+                  "AWS_ACCESS_KEY_ID",
+                  "AWS_SECRET_ACCESS_KEY",
+                  "AWS_REGION"
+                ]
+              },
+              "stages": [
+                "production",
+                "development"
+              ]
+            },
+            "package": {
+              "exclude": [
+                "node_modules/aws-sdk/**",
+                ".git/**",
+                "docs/**",
+                "tests/**"
+              ],
+              "artifactsS3KeyDirname": "serverless/twineaihub/dev/code-artifacts",
+              "deploymentBucket": "serverless-framework-deployments-us-east-1-841f666e-620d",
+              "artifact": "C:\\Users\\HP\\Desktop\\thirdman-backend\\.serverless\\twineaihub.zip",
+              "artifactDirectoryName": "serverless/twineaihub/dev/1734637644091-2024-12-19T19:47:24.091Z"
+            }
+          },
+          "configFileDirPath": "C:\\Users\\HP\\Desktop\\thirdman-backend",
+          "config": {
+            "type": "sls"
+          },
+          "options": {
+            "aws-profile": "default"
+          },
+          "stage": "dev",
+          "dashboard": null,
+          "logger": {
+            "namespace": "s:core:resolver:sls",
+            "prefix": null,
+            "prefixColor": null
+          },
+          "_credentialsPromise": "<REDACTED>"
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": null,
+    "servicePath": "C:\\Users\\HP\\Desktop\\thirdman-backend",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "org": "twineaihub",
+      "app": "twineaihub",
+      "service": "twineaihub",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs20.x",
+        "region": "us-east-1",
+        "memorySize": 2048,
+        "timeout": 30,
+        "lambdaHashingVersion": "20201221",
+        "httpApi": {
+          "cors": {
+            "allowedOrigins": [
+              "https://twineaihub.com"
+            ],
+            "allowCredentials": "<REDACTED>"
+          }
+        },
+        "environment": {
+          "PADDLE_PUBLIC_KEY": "",
+          "ALLOW_ANONYMOUS": "true",
+          "JWT_SECRET": "<REDACTED>",
+          "OPENAI_API_KEY": "<REDACTED>",
+          "Google_Gemini_KEY": "AIzaSyDWmLWTEAujx3vLdfH-VTifvE2Jti6bR5U",
+          "Claude_Key": "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",
+          "MONGODB_URL": "mongodb+srv://wairioko:9397Arsenal@twineaihub.nvy6uxv.mongodb.net/?retryWrites=true&w=majority&appName=twineaihub",
+          "GOOGLE_CLIENT_ID": "567429857631-ebammee25cmgj0hhmh4v9u3gis8ls3h1.apps.googleusercontent.com",
+          "GOOGLE_CLIENT_SECRET": "<REDACTED>",
+          "AWS_BUCKET_NAME": "aiflow",
+          "REFRESH_TOKEN_SECRET": "<REDACTED>",
+          "NODE_ENV": "production",
+          "CLIENT_URL": "https://www.twineaihub.com",
+          "COOKIE_DOMAIN": "www.62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws",
+          "GOOGLE_CALLBACK_URL": "https://62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws/auth/google/callback",
+          "COGNITO_AWS_REGION": "us-east-1",
+          "COGNITO_USER_POOL_ID": "us-east-1_LTkM1F1HZ",
+          "COGNITO_CLIENT_ID": "7hljljjtpgrqr26m8ssdiv9775",
+          "REDIS_URL": "redis-15846.c85.us-east-1-2.ec2.redns.redis-cloud.com:15846",
+          "REDIS_PASSWORD": "<REDACTED>"
+        },
+        "iam": {
+          "role": {
+            "statements": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "s3:PutObject",
+                  "s3:GetObject",
+                  "s3:DeleteObject"
+                ],
+                "Resource": "arn:aws:s3:::aiflow/*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:*"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+        },
+        "stage": "dev",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "StartApplicationLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/twineaihub-dev-startApplication"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "twineaihub",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/twineaihub-dev*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/twineaihub-dev*:*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "s3:PutObject",
+                            "s3:GetObject",
+                            "s3:DeleteObject"
+                          ],
+                          "Resource": "arn:aws:s3:::aiflow/*"
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "dynamodb:*"
+                          ],
+                          "Resource": "*"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "twineaihub",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "StartApplicationLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-841f666e-620d",
+                  "S3Key": "serverless/twineaihub/dev/1734637644091-2024-12-19T19:47:24.091Z/twineaihub.zip"
+                },
+                "Handler": "src/handler.startApplication",
+                "Runtime": "nodejs20.x",
+                "FunctionName": "twineaihub-dev-startApplication",
+                "MemorySize": 2048,
+                "Timeout": 30,
+                "Environment": {
+                  "Variables": {
+                    "PADDLE_PUBLIC_KEY": "",
+                    "ALLOW_ANONYMOUS": "true",
+                    "JWT_SECRET": "<REDACTED>",
+                    "OPENAI_API_KEY": "<REDACTED>",
+                    "Google_Gemini_KEY": "AIzaSyDWmLWTEAujx3vLdfH-VTifvE2Jti6bR5U",
+                    "Claude_Key": "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",
+                    "MONGODB_URL": "mongodb+srv://wairioko:9397Arsenal@twineaihub.nvy6uxv.mongodb.net/?retryWrites=true&w=majority&appName=twineaihub",
+                    "GOOGLE_CLIENT_ID": "567429857631-ebammee25cmgj0hhmh4v9u3gis8ls3h1.apps.googleusercontent.com",
+                    "GOOGLE_CLIENT_SECRET": "<REDACTED>",
+                    "AWS_BUCKET_NAME": "aiflow",
+                    "REFRESH_TOKEN_SECRET": "<REDACTED>",
+                    "NODE_ENV": "production",
+                    "CLIENT_URL": "https://www.twineaihub.com",
+                    "COOKIE_DOMAIN": "www.62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws",
+                    "GOOGLE_CALLBACK_URL": "https://62bcpqx5ufwtr75ifcd2zi5naa0qaxtk.lambda-url.us-east-1.on.aws/auth/google/callback",
+                    "COGNITO_AWS_REGION": "us-east-1",
+                    "COGNITO_USER_POOL_ID": "us-east-1_LTkM1F1HZ",
+                    "COGNITO_CLIENT_ID": "7hljljjtpgrqr26m8ssdiv9775",
+                    "REDIS_URL": "redis-15846.c85.us-east-1-2.ec2.redns.redis-cloud.com:15846",
+                    "REDIS_PASSWORD": "<REDACTED>"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "StartApplicationLogGroup"
+              ]
+            },
+            "StartApplicationLambdaVersionzw2BAG0W5CPU1plQ1jSuD2zf4GNjiesIxBaI7RuvIiY": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "StartApplicationLambdaFunction"
+                },
+                "CodeSha256": "HB2Z2Dn86eWH9eyWbGrbzI27PtSRuhgVYcNygEjnMXY="
+              }
+            },
+            "HttpApi": {
+              "Type": "AWS::ApiGatewayV2::Api",
+              "Properties": {
+                "Name": "dev-twineaihub",
+                "ProtocolType": "HTTP",
+                "CorsConfiguration": {
+                  "AllowCredentials": "<REDACTED>",
+                  "AllowHeaders": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "AllowMethods": [
+                    "OPTIONS",
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "PATCH",
+                    "HEAD",
+                    "DELETE"
+                  ],
+                  "AllowOrigins": [
+                    "https://twineaihub.com"
+                  ]
+                }
+              }
+            },
+            "HttpApiStage": {
+              "Type": "AWS::ApiGatewayV2::Stage",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "StageName": "$default",
+                "AutoDeploy": true,
+                "DefaultRouteSettings": {
+                  "DetailedMetricsEnabled": false
+                }
+              }
+            },
+            "StartApplicationLambdaPermissionHttpApi": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "StartApplicationLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "HttpApi"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "HttpApiIntegrationStartApplication": {
+              "Type": "AWS::ApiGatewayV2::Integration",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "IntegrationType": "AWS_PROXY",
+                "IntegrationUri": {
+                  "Fn::GetAtt": [
+                    "StartApplicationLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "PayloadFormatVersion": "2.0",
+                "TimeoutInMillis": 30000
+              }
+            },
+            "HttpApiRouteAnyProxyVar": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "ANY /{proxy+}",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationStartApplication"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationStartApplication"
+            },
+            "HttpApiRouteAny": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "ANY /",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationStartApplication"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationStartApplication"
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-us-east-1-841f666e-620d",
+              "Export": {
+                "Name": "sls-twineaihub-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "StartApplicationLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "StartApplicationLambdaVersionzw2BAG0W5CPU1plQ1jSuD2zf4GNjiesIxBaI7RuvIiY"
+              },
+              "Export": {
+                "Name": "sls-twineaihub-dev-StartApplicationLambdaFunctionQualifiedArn"
+              }
+            },
+            "HttpApiId": {
+              "Description": "Id of the HTTP API",
+              "Value": {
+                "Ref": "HttpApi"
+              },
+              "Export": {
+                "Name": "sls-twineaihub-dev-HttpApiId"
+              }
+            },
+            "HttpApiUrl": {
+              "Description": "URL of the HTTP API",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-twineaihub-dev-HttpApiUrl"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "startApplication": {
+          "handler": "src/handler.startApplication",
+          "events": [
+            {
+              "httpApi": {
+                "method": "*",
+                "path": "/{proxy+}"
+              },
+              "resolvedMethod": "ANY",
+              "resolvedPath": "/{proxy+}"
+            },
+            {
+              "httpApi": {
+                "method": "*",
+                "path": "/"
+              },
+              "resolvedMethod": "ANY",
+              "resolvedPath": "/"
+            }
+          ],
+          "name": "twineaihub-dev-startApplication",
+          "package": {},
+          "memory": 2048,
+          "timeout": 30,
+          "runtime": "nodejs20.x",
+          "vpc": {},
+          "versionLogicalId": "StartApplicationLambdaVersionzw2BAG0W5CPU1plQ1jSuD2zf4GNjiesIxBaI7RuvIiY"
+        }
+      },
+      "custom": {
+        "dotenv": {
+          "path": ".env",
+          "exclude": [
+            "AWS_ACCESS_KEY_ID",
+            "AWS_SECRET_ACCESS_KEY",
+            "AWS_REGION"
+          ]
+        },
+        "stages": [
+          "production",
+          "development"
+        ]
+      },
+      "package": {
+        "exclude": [
+          "node_modules/aws-sdk/**",
+          ".git/**",
+          "docs/**",
+          "tests/**"
+        ],
+        "artifactsS3KeyDirname": "serverless/twineaihub/dev/code-artifacts",
+        "deploymentBucket": "serverless-framework-deployments-us-east-1-841f666e-620d",
+        "artifact": "C:\\Users\\HP\\Desktop\\thirdman-backend\\.serverless\\twineaihub.zip",
+        "artifactDirectoryName": "serverless/twineaihub/dev/1734637644091-2024-12-19T19:47:24.091Z"
+      }
+    },
+    "serviceRawFile": "org: twineaihub\r\napp: twineaihub\r\nservice: twineaihub\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs20.x\r\n  region: us-east-1\r\n  memorySize: 2048\r\n  timeout: 30\r\n  lambdaHashingVersion: 20201221\r\n  \r\n  httpApi:\r\n    cors:\r\n      allowedOrigins:\r\n        - https://twineaihub.com\r\n      allowCredentials: true\r\n\r\n  environment:\r\n    PADDLE_PUBLIC_KEY: ${env:PADDLE_PUBLIC_KEY}\r\n    ALLOW_ANONYMOUS: true\r\n    JWT_SECRET: ${env:JWT_SECRET}\r\n    OPENAI_API_KEY: ${env:OPENAI_API_KEY}\r\n    Google_Gemini_KEY: ${env:Google_Gemini_KEY}\r\n    Claude_Key: ${env:Claude_Key}\r\n    MONGODB_URL: ${env:MONGODB_URL}\r\n    GOOGLE_CLIENT_ID: ${env:GOOGLE_CLIENT_ID}\r\n    GOOGLE_CLIENT_SECRET: ${env:GOOGLE_CLIENT_SECRET}\r\n    AWS_BUCKET_NAME: ${env:AWS_BUCKET_NAME}\r\n    REFRESH_TOKEN_SECRET: ${env:REFRESH_TOKEN_SECRET}\r\n    NODE_ENV: ${env:NODE_ENV}\r\n    CLIENT_URL: ${env:CLIENT_URL}\r\n    COOKIE_DOMAIN: ${env:COOKIE_DOMAIN}\r\n    GOOGLE_CALLBACK_URL: ${env:GOOGLE_CALLBACK_URL}\r\n    COGNITO_AWS_REGION: ${env:COGNITO_AWS_REGION}\r\n    COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}\r\n    COGNITO_CLIENT_ID: ${env:COGNITO_CLIENT_ID}\r\n    REDIS_URL: ${env:REDIS_URL}\r\n    REDIS_PASSWORD: ${env:REDIS_PASSWORD}\r\n    \r\n\r\n  iam:\r\n    role:\r\n      statements:\r\n        - Effect: Allow\r\n          Action:\r\n            - s3:PutObject\r\n            - s3:GetObject\r\n            - s3:DeleteObject\r\n          Resource: \r\n            - \"arn:aws:s3:::aiflow/*\"\r\n        - Effect: Allow\r\n          Action:\r\n            - dynamodb:*\r\n          Resource: \"*\"\r\n\r\nfunctions:\r\n  startApplication:\r\n    handler: src/handler.startApplication\r\n    events:\r\n      - httpApi:\r\n          method: '*'\r\n          path: /{proxy+}\r\n      - httpApi:\r\n          method: '*'\r\n          path: /\r\n  \r\n\r\ncustom:\r\n  dotenv:\r\n    path: .env\r\n    exclude:\r\n      - AWS_ACCESS_KEY_ID\r\n      - AWS_SECRET_ACCESS_KEY\r\n      - AWS_REGION\r\n  \r\n  stages:\r\n    - production\r\n    - development\r\n\r\n  # analyzeProblem:\r\n  #   handler: src/Chat/handlers/problemController.problemController\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/assistant/analyze\r\n  #         method: post\r\n  #         cors: true\r\n\r\n\r\n  # solveProblem:\r\n  #   handler: src/Chat/handlers/handleSolveProblem.handleSolveProblem\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/chat/solve\r\n  #         method: post\r\n  #         cors: true\r\n\r\n\r\n  # findAllModelResponses:\r\n  #   handler: src/Chat/handlers/findAllModelResponses.findAllModelResponses\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/chat/:id\r\n  #         method: get\r\n  #         cors: true\r\n\r\n\r\n  # handleSSE:\r\n  #   handler: src/Chat/handlers/handleSSE.handleSSE\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/chat/:chatId\r\n  #         method: get\r\n  #         cors: true\r\n\r\n\r\n  # # handleWebhook:\r\n  # #   handler: src/Subscription/handler/\r\n  # #   events:\r\n  # #     - http:\r\n  # #         path: /webhook\r\n  # #         method: post\r\n  # #         cors: true\r\n\r\n\r\n  # getChat:\r\n  #   handler: src/Chat/handlers/getChatById.getChatById\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/chat/:chatid/:name\r\n  #         method: get\r\n  #         cors: true\r\n\r\n\r\n  # regenerateResponse:\r\n  #   handler: src/Chat/handlers/regenerateModelResponse.regenerateModelResponse\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/chat/feedback\r\n  #         method: post\r\n  #         cors: true\r\n\r\n\r\n  # getChatHistory:\r\n  #   handler: src/Chat/handlers/getChatsHistory.getChatsHistoryHandler\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/user/history\r\n  #         method: get\r\n  #         cors: true\r\n\r\n\r\n  # deleteChatById:\r\n  #   handler: src/Chat/handlers/deleteChat.deleteChatHandler\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/chat/{chatid}\r\n  #         method: delete\r\n  #         cors: true\r\n\r\n\r\n  # editUserMessage:\r\n  #   handler: src/Chat/handlers/editUserMessageResponseHandler.editUserMessageResponseHandler\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/chat/edit\r\n  #         method: put\r\n  #         cors: true\r\n\r\n\r\n  # handleWebhook:\r\n  #   handler: src/Subscription/handler/subscriptionHandler.handleWebhook\r\n  #   events:\r\n  #     - http:\r\n  #         path: /webhook/paddle\r\n  #         method: post\r\n  #         cors: true\r\n\r\n\r\n  # getSubscriptionDetails:\r\n  #   handler: src/Subscription/handler/subscriptionHandler.getSubscriptionDetails\r\n  #   events:\r\n  #     - http:\r\n  #         path: /subscription\r\n  #         method: get\r\n  #         cors: true\r\n        \r\n\r\n  # getCancellationUrl:\r\n  #   handler: src/Subscription/handler/subscriptionHandler.getCancellationUrl\r\n  #   events:\r\n  #     - http:\r\n  #         path: /subscription/cancel\r\n  #         method: get\r\n  #         cors: true\r\n          \r\n\r\n  # getTokenUsage:\r\n  #   handler: src/Usage/handler/usageHandler.getTokenUsage\r\n  #   events:\r\n  #     - http:\r\n  #         path: /billing/token-usage\r\n  #         method: get\r\n  #         cors: true\r\n          \r\n  #   environment:\r\n  #     NODE_OPTIONS: --max-old-space-size=512 # Ensure enough memory for large datasets\r\n  \r\n\r\n  # userLoginHandler:\r\n  #   handler: src/Users/handlers/loginHandler.userLoginHandler \r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/user/login\r\n  #         method: post\r\n  #         cors: true\r\n\r\n\r\n  # userLogoutHandler:\r\n  #   handler: src/Users/handlers/logoutHandler.userLogoutHandler\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/user/logout\r\n  #         method: post\r\n  #         cors: true\r\n  \r\n\r\n  # profileHandler:\r\n  #   handler: src/Users/handlers/profileHandler.profileHandler\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/user/profile\r\n  #         method: get\r\n  #         cors: true\r\n\r\n\r\n  # emailSignUpHandler:\r\n  #   handler: src/Users/handlers/signUpHandler.emailSignUpHandler\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/user/register\r\n  #         method: post\r\n  #         cors: true\r\n\r\n  \r\n  # googleCallbackHandler:\r\n  #   handler: src/Users/handlers/googleCallbackHandler.googleCallbackHandler\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/user/google/callback\r\n  #         method: get\r\n  #         cors: true\r\n\r\n\r\n  # tokenRefreshHandler:\r\n  #   handler: src/Users/handlers/tokenRefreshHandler.tokenRefreshHandler\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/user/token/refresh\r\n  #         method: post\r\n  #         cors: true\r\n\r\n\r\n  # checkAuth:\r\n  #   handler: src/Users/handlers/checkAuthHandler.checkAuthHandler\r\n  #   events:\r\n  #     - http:\r\n  #         path: /api/user/checkAuth\r\n  #         method: get\r\n  #         cors: true\r\n\r\npackage:\r\n    exclude:\r\n      - node_modules/aws-sdk/**  # AWS SDK is pre-installed in Lambda, so you don't need to include it.\r\n      - .git/**\r\n      - docs/**\r\n      - tests/**\r\n\r\n# # plugins:\r\n# #   - serverless-offline\r\n# #   - serverless-dotenv-plugin",
+    "command": [
+      "deploy"
+    ],
+    "options": {
+      "aws-profile": "default"
+    },
+    "error": null,
+    "params": {},
+    "machineId": "339fdc165f17360ce8b63f53c7943e10",
+    "stage": "dev",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "e11a4613-7d38-4139-a858-5b21a2b0ddee",
+    "orgName": "twineaihub",
+    "userId": "bPlGPktD2qrj81D8Jz",
+    "dashboard": {
+      "isEnabledForService": true,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": {
+        "providers": false,
+        "monitoring": false
+      },
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": "6GqYGPHNtj9cGB8C2d",
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "twineaihub",
+    "subscription": null,
+    "userEmail": "charlesmungai5@gmail.com",
+    "serviceProviderAwsRegion": "us-east-1",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "727646510448",
+    "projectType": "traditional",
+    "versionSf": "4.4.18",
+    "serviceProviderAwsCfStackName": "twineaihub-dev",
+    "integrations": {},
+    "serviceUniqueId": "arn:aws:cloudformation:us-east-1:727646510448:stack/twineaihub-dev/e5eac680-a0dd-11ef-9414-0eeb3232c81b",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:727646510448:stack/twineaihub-dev/e5eac680-a0dd-11ef-9414-0eeb3232c81b",
+    "serviceProviderAwsCfStackCreated": "2024-11-12T10:07:17.852Z",
+    "serviceProviderAwsCfStackUpdated": "2024-12-19T19:50:33.964Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "StartApplicationLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:727646510448:function:twineaihub-dev-startApplication:230",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-twineaihub-dev-StartApplicationLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "HttpApiId",
+        "OutputValue": "ezfjakqif2",
+        "Description": "Id of the HTTP API",
+        "ExportName": "sls-twineaihub-dev-HttpApiId"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-us-east-1-841f666e-620d",
+        "ExportName": "sls-twineaihub-dev-ServerlessDeploymentBucketName"
+      },
+      {
+        "OutputKey": "HttpApiUrl",
+        "OutputValue": "https://ezfjakqif2.execute-api.us-east-1.amazonaws.com",
+        "Description": "URL of the HTTP API",
+        "ExportName": "sls-twineaihub-dev-HttpApiUrl"
+      }
+    ]
+  }
+}
