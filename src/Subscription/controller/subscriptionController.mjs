@@ -6,150 +6,154 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
-export class SubscriptionController {
-  // Keep webhook signature verification
-  static verifyWebhookSignature(rawBody, signature) {
-    const hmac = createHmac('sha256', process.env.PADDLE_PUBLIC_KEY)
-      .update(rawBody)
-      .digest('hex');
-    return hmac === signature;
-  }
+// Verify Paddle webhook signature
+const verifyPaddleWebhook = (req) => {
+  const rawBody = req.rawBody;
+  const signature = req.headers["paddle-signature"];
+  const hmac = createHmac("sha256", process.env.PADDLE_PUBLIC_KEY);
+  hmac.update(rawBody);
+  const hash = hmac.digest("hex");
+  return hash === signature;
+};
 
-  // Simplified webhook handler
-  static async handleWebhook(req, res) {
-    try {
-      const signature = req.headers['paddle-signature'];
-      if (!SubscriptionController.verifyWebhookSignature(req.rawBody, signature)) {
-        return res.status(401).json({ error: 'Invalid webhook signature' });
-      }
-
-      const { alert_name, ...data } = req.body;
-
-      switch (alert_name) {
-        case 'subscription_created':
-        case 'subscription_updated':
-          await SubscriptionController.syncSubscriptionStatus(data);
-          break;
-        case 'subscription_cancelled':
-          await SubscriptionController.handleSubscriptionCancelled(data);
-          break;
-        case 'subscription_payment_failed':
-          await SubscriptionController.handlePaymentFailed(data);
-          break;
-      }
-
-      res.status(200).send('Webhook processed');
-    } catch (error) {
-      console.error('Webhook processing error:', error);
-      res.status(500).json({ error: 'Webhook processing failed' });
-    }
-  }
-
-  // Simplified status sync
-  static async syncSubscriptionStatus(data) {
+// Handle client-side subscription confirmation
+export const confirmSubscription = async (req, res) => {
+  const token = req.cookies.authToken
+  const user= jwt.verify(token, process.env.JWT_SECRET)
+  const userId = user.userId
+  try {
+    // Extract transaction details from the request body
     const {
-      subscription_id,
-      user_id,
+      id,
       status,
-      next_bill_date,
-      update_url,
-      cancel_url
-    } = data;
+      customer_id,
+      address_id,
+      subscription_id,
+      invoice_id,
+      invoice_number,
+      billing_details,
+      currency_code,
+      billing_period,
+      created_at,
+      updated_at,
+      items,
+    } = req.body;
 
-    const subscription = await Subscription.findOneAndUpdate(
-      { paddleSubscriptionId: subscription_id },
-      {
-        $set: {
-          userId: user_id,
-          status: status || 'active',
-          currentPeriodEnd: new Date(next_bill_date),
-          updateUrl: update_url,
-          cancelUrl: cancel_url
-        }
-      },
-      { upsert: true, new: true }
-    );
 
-    await UserModel.findByIdAndUpdate(user_id, {
-      subscriptionStatus: status || 'active',
-      currentSubscription: subscription._id
+    // Create a new subscription record
+    const subscription = new Subscription({
+      userId,
+      id,
+      status,
+      customer_id,
+      address_id,
+      subscription_id,
+      invoice_id,
+      invoice_number,
+      billing_details,
+      currency_code,
+      billing_period,
+      created_at,
+      updated_at,
+      items,
+      
     });
+
+    const savedSubscription = await subscription.save();
+
+    // Update the user's subscription status
+    await UserModel.findByIdAndUpdate(userId, {
+      currentSubscription: savedSubscription._id,
+      subscriptionStatus: true,
+    });
+
+    res.status(200).json({ message: "Subscription confirmed successfully!" });
+  } catch (error) {
+    console.error("Error confirming subscription:", error);
+    res.status(500).json({ error: "Failed to confirm subscription." });
   }
+};
 
-  static async handleSubscriptionCancelled(data) {
-    const { subscription_id, cancellation_effective_date } = data;
+// Handle Paddle webhook
+export const handlePaddleWebhook = async (req, res) => {
+  try {
+    if (!verifyPaddleWebhook(req)) {
+      return res.status(401).json({ error: "Invalid webhook signature" });
+    }
 
-    await Subscription.findOneAndUpdate(
-      { paddleSubscriptionId: subscription_id },
-      {
-        status: 'cancelled',
-        cancelledAt: new Date(),
-        currentPeriodEnd: new Date(cancellation_effective_date)
-      }
+    const eventType = req.body.alert_name;
+    const data = req.body;
+
+    switch (eventType) {
+      case "subscription_created":
+        await handleSubscriptionCreated(data);
+        break;
+      case "subscription_updated":
+        await handleSubscriptionUpdated(data);
+        break;
+      case "subscription_cancelled":
+        await handleSubscriptionCancelled(data);
+        break;
+      default:
+        console.warn(`Unhandled event type: ${eventType}`);
+    }
+
+    res.status(200).json({ message: "Webhook processed successfully" });
+  } catch (error) {
+    console.error("Error processing webhook:", error);
+    res.status(500).json({ error: "Failed to process webhook" });
+  }
+};
+
+// Subscription-created handler
+const handleSubscriptionCreated = async (data) => {
+  const subscription = await Subscription.findOneAndUpdate(
+    { subscriptionId: data.subscription_id },
+    {
+      status: "active",
+      nextBillDate: new Date(data.next_bill_date),
+      updatedAt: new Date(),
+    },
+    { upsert: true, new: true } // Create if doesn't exist
+  );
+
+  if (subscription) {
+    await User.findOneAndUpdate(
+      { currentSubscription: subscription._id },
+      { subscriptionStatus: "true" }
     );
-
-    const subscription = await Subscription.findOne({ paddleSubscriptionId: subscription_id });
-    if (subscription) {
-      await UserModel.findByIdAndUpdate(subscription.userId, {
-        subscriptionStatus: 'cancelled'
-      });
-    }
   }
+};
 
-  static async handlePaymentFailed(data) {
-    const { subscription_id } = data;
+// Subscription-updated handler
+const handleSubscriptionUpdated = async (data) => {
+  await Subscription.findOneAndUpdate(
+    { subscriptionId: data.subscription_id },
+    {
+      status: data.status,
+      nextBillDate: new Date(data.next_bill_date),
+      updatedAt: new Date(),
+    }
+  );
+};
 
-    const subscription = await Subscription.findOneAndUpdate(
-      { paddleSubscriptionId: subscription_id },
-      { status: 'past_due' }
+// Subscription-cancelled handler
+const handleSubscriptionCancelled = async (data) => {
+  const subscription = await Subscription.findOneAndUpdate(
+    { subscriptionId: data.subscription_id },
+    {
+      status: "cancelled",
+      cancelledAt: new Date(),
+      updatedAt: new Date(),
+    }
+  );
+
+  if (subscription) {
+    await UserModel.findOneAndUpdate(
+      { currentSubscription: subscription._id },
+      { subscriptionStatus: false }
     );
-
-    if (subscription) {
-      await UserModel.findByIdAndUpdate(subscription.userId, {
-        subscriptionStatus: 'past_due'
-      });
-    }
   }
+};
 
-  // User-facing endpoints
-  static async getSubscriptionDetails(req, res) {
-    const token = req.cookies.authToken
-    const user= jwt.verify(token, process.env.JWT_SECRET)
-    const userId = user.userId
 
-    try {
-      const subscription = await Subscription.findOne({
-        userId: userId
-      }).sort({ createdAt: -1 });
-
-      if (!subscription) {
-        return res.status(404).json({ error: 'No subscription found' });
-      }
-
-      res.json(subscription);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch subscription details' });
-    }
-  }
-
-  // Redirect to Paddle's hosted pages for management
-  static async cancelSubscription(req, res) {
-    const token = req.cookies.authToken
-    const user= jwt.verify(token, process.env.JWT_SECRET)
-    const userId = user.userId
-    try {
-      const subscription = await Subscription.findOne({
-        userId: userId,
-        status: 'active'
-      });
-
-      if (!subscription) {
-        return res.status(404).json({ error: 'No active subscription found' });
-      }
-
-      res.json({ cancelUrl: subscription.cancelUrl });
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to get cancellation URL' });
-    }
-  }
-}
