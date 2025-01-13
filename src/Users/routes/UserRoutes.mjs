@@ -70,7 +70,7 @@ router.post('/auth/google', googleSignIn);
 // Route to handle the callback from Cognito after Google login
 // router.get('/auth/google/callback', handleGoogleCallback);
 
-router.get('/auth/logout', userLogout);
+router.post('/auth/logout', userLogout);
 
 router.get('/auth/status', checkAuth);
 
