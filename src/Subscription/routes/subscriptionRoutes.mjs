@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/webhook', handlePaddleWebhook);
 
 
-router.get('/api/subscription/confirm', confirmSubscription);
+router.post('/api/subscription/confirm', confirmSubscription);
 
 
 export default router;
