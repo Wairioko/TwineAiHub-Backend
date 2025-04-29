@@ -54,8 +54,8 @@ export const rateLimiter = async (req, res, next) => {
         let userId = null;
         if (userIdFromCookie) {
             try {
-                const decoded = jwt.verify(userIdFromCookie, process.env.JWT_SECRET); // Ensure your JWT_SECRET matches the one used to sign the tokens
-                userId = decoded.userId; // Assumes the JWT payload has a `userId` field
+                const decoded = jwt.verify(userIdFromCookie, process.env.JWT_SECRET);
+                userId = decoded.userId; 
             } catch (err) {
                 console.error('Failed to decode JWT:', err);
                 res.clearCookie('idToken');
@@ -89,12 +89,12 @@ export const rateLimiter = async (req, res, next) => {
             }
 
             // Set appropriate limits based on subscription status
-            if (!user.isSubscribed) {
+            if (user.userSubscription === false) {
                 userLimit = RATE_LIMITS.REGISTERED;
                 responseMessage = "Daily request limit reached. Please subscribe to get more access.";
             } else {
                 userLimit = RATE_LIMITS.SUBSCRIBED;
-                responseMessage = "Request limit reached.";
+                responseMessage = "No request limit";
             }
 
             // Check if there's an existing anonymous record to migrate

@@ -48,15 +48,15 @@ const userBillingSchema = new mongoose.Schema({
   creditBalance: { 
     type: Number, 
     default: 0 
-  },  // Additional credit purchased by user
+  },  
   carriedForwardCredit: { 
     type: Number, 
     default: 0 
-  },  // Unused credit carried forward to new period
+  }, 
   monthlyUsage: { 
     type: Number, 
     default: 0 
-  }, // Cost incurred in the current month
+  }, 
   lastUpdated: {
     type: Date,
     default: Date.now
