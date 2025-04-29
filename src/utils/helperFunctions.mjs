@@ -95,7 +95,7 @@ class redisClient {
 function clearAuthCookies(res) {
     res.clearCookie('authToken', cookieOptions);
     res.clearCookie('anonymousId', cookieOptions);
-    res.clearCookie('userId', cookieOptions);
+    res.clearCookie('idToken', cookieOptions);
     res.clearCookie('anonToken', cookieOptions);
     res.clearCookie('refreshToken', cookieOptions);
 }
