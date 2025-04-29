@@ -19,8 +19,8 @@ const UserSchema = mongoose.Schema({
         required: false
     },
     subscriptionStatus: {
-      type: String,
-      default: "Free"
+      type: Boolean,
+      default: false
     },
     currentSubscription: {
       type: String,
